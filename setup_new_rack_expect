@@ -1,0 +1,52 @@
+#!/usr/bin/expect -f
+set ip [lindex $argv 0];
+set host [lindex $argv 1];
+set PWD [lindex $argv 2];
+
+#these values can be hard coded below for less arguments
+set dns [lindex $argv 3];
+set manager_ip [lindex $argv 4];
+set netmask [lindex $argv 5];
+set gw_ip [lindex $argv 6];
+
+spawn ssh -A -l localadmin -o StrictHostKeyChecking=no $ip
+expect "Password:"
+send $PWD\r
+expect "# "
+send "edit\r"
+expect "(working)# "
+send "system city Chicago\r"
+expect "(working)# "
+send "system country US\r"
+expect "(working)# "
+send "system organization UniversityOfChicago\r"
+expect "(working)# "
+send "system orgunit CDIS\r"
+expect "(working)# "
+send "system state Illinois\r"
+expect "(working)# "
+send "system hostname $host\r"
+expect "(working)# "
+send "system dns $dns\r"
+expect "(working)# "
+send "activate\r"
+expect "# "
+send "edit\r"
+expect "(working)# "
+send "manager ip $manager_ip\r"
+expect "i]: "
+send "y\r"
+expect "(working)# "
+send "activate\r"
+expect "# "
+#send "ipmi lan set 1 ipsrc static\r"
+#expect "# "
+#send "ipmi lan set 1 ipaddr $ipmi\r"
+#expect "# "
+#send "ipmi lan set 1 netmask $netmask\r"
+#expect "# "
+#send "ipmi lan set 1 defgw ipaddr $gw_ip\r"
+#expect "# "
+#send "ipmi user set password 2 $ipmipw\r"
+expect "# "
+send "exit\r"

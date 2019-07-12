@@ -1,0 +1,19 @@
+#!/usr/bin/expect -f
+set ip  [lindex $argv 0]
+set ipmi [lindex $argv 1];
+set ipmipw [lindex $argv 2];
+set netmask [lindex $argv 3];
+set ipaddr [lindex $argv 4];
+spawn ssh -A -l root -o StrictHostKeyChecking=no $ip
+expect "# "
+send "ipmitool lan set 1 ipsrc static\r"
+expect "# "
+send "ipmitool lan set 1 ipaddr $ipmi\r"
+expect "# "
+send "ipmitool lan set 1 netmask $netmask\r"
+expect "# "
+send "ipmitool lan set 1 defgw ipaddr $ipaddr\r"
+expect "# "
+send "ipmitool user set password 2 $ipmipw\r"
+expect "# "
+send "exit\r"
